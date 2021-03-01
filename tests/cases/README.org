@@ -1,0 +1,19 @@
+* case1 read-through joining IFITM2/IFITM1
+** locus: chr11:307,158-315,478
+** tandem dup, looks like a false read_through, although characterized as
+an overlapping locus with readthrough assigned to one gene
+** genes
+- IFITM2 ENSG00000185201.16
+- IFITM1 ENSG00000185885.16
+- suspect ENST00000399815.2 / ENSG00000185201.16 / IFITM2
+    overlapping_locus tag
+    
+
+* case2 read through joining ZBTB8B/ZBTB8A
+** locus: chr1:32,465,056-32,600,792
+** tandem dup, looks like a false read_through, readthrough in unique gene
+
+** genes
+- ENSG00000273274.2 / ZBTB8B
+- ENSG00000160062.15 / ZBTB8A
+- suspect ENST00000480336.1 / ENSG00000254553.1 / AL033529.1
