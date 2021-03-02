@@ -15,28 +15,32 @@ def exonRangeFinder(transTbl):
     return exonRf
 
 
-
-
 def sharedExon(exon1, exon2):
-    return (exon1.gene.name2 != exon2.gene.name2) and ((exon1.start == exon2.start) or (exon1.end == exon2.end))
+    return (exon1.start == exon2.start) or (exon1.end == exon2.end)
 
 def findSharedGenes(exonRf, trans):
     geneNames = list()
     for exon in trans.exons:
         for overExon in exonRf.overlapping(trans.chrom, exon.start, exon.end, trans.strand):
             if sharedExon(exon, overExon):
-                if exon.gene.name2 not in geneNames:
-                    geneNames.append(exon.gene.name2)
+                if overExon.gene.name2 not in geneNames:
+                    geneNames.append(overExon.gene.name2)
+    print(trans.name, geneNames)
     return geneNames
 
 
 def findSharedExonGenes(exonRf, transTbl):
+    readThroughs = []
     for trans in transTbl:
-        findSharedGenes(exonRf, trans)
-    return
+        geneNames = findSharedGenes(exonRf, trans)
+        if len(geneNames) > 1:
+            readThroughs.append(trans)
+    return readThroughs
 
 def main():
-    file = open('tests/cases/case1AnnotV36.gp', 'r')
+    file = open('tests/cases/case2AnnotV36.gp', 'r')
     transTbl = GenePredTbl(file)
     exonRf = exonRangeFinder(transTbl)
-    findSharedExonGenes(exonRf, transTbl)
+    readThroughs = findSharedExonGenes(exonRf, transTbl)
+    print("readThroughts", readThroughs)
+main()
