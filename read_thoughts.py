@@ -1,7 +1,5 @@
 from pycbio.hgdata.genePred import GenePredTbl
 from pycbio.hgdata.rangeFinder import RangeFinder
-file=open('tests/cases/case1AnnotV36.gp', 'r')
-gpTbl = GenePredTbl(file)
 
 
 def addExons(exonRf, gp):
@@ -16,27 +14,29 @@ def exonRangeFinder(gpTbl):
         addExons(exonRf, gp)
     return exonRf
 
-exonRf=exonRangeFinder(gpTbl)
+
 
 
 def sharedExon(exon1, exon2):
     return (exon1.gene.name2 != exon2.gene.name2) and ((exon1.start == exon2.start) or (exon1.end == exon2.end))
 
-def overlappingExons(exonRf, gp):
+def findSharedGenes(exonRf, gp):
+    geneNames = list()
     for exon in gp.exons:
         for overExon in exonRf.overlapping(gp.chrom, exon.start, exon.end, gp.strand):
             if sharedExon(exon, overExon):
-                genes=list()
-                genes.append(exon.gene)
-                if overExon.gene not in genes:
-                    transcripts=list()
-                    transcripts.append(exon.gene)
-                    print(transcripts)
+                if exon.gene.name2 not in geneNames:
+                    geneNames.append(exon.gene.name2)
+    return geneNames
 
 
-def findSharedExonGenes(gpTbl):
+def findSharedExonGenes(exonRf, gpTbl):
     for gp in gpTbl:
-        overlappingExons(exonRf, gp)
-    return exonRf
+        findSharedGenes(exonRf, gp)
+    return
 
-exonRf=findSharedExonGenes(gpTbl)
+def main():
+    file = open('tests/cases/case1AnnotV36.gp', 'r')
+    gpTbl = GenePredTbl(file)
+    exonRf = exonRangeFinder(gpTbl)
+    findSharedExonGenes(exonRf, gpTbl)
