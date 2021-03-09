@@ -42,9 +42,9 @@ def findSharedExonGenes(exonRf, transTbl):
 def transcriptionSupportLevel(tsl):
     tslDict={}
     for tslRow in csv.DictReader(tsl, delimiter='\t'):
-        for key, val in tslRow.items():
-            if key=='transcriptId' and 'level':
-                tslDict.update({tslRow['transcriptId']:tslRow['level']})
+        transcriptId=tslRow['transcriptId']
+        level=tslRow['level']
+        tslDict[transcriptId]=level
     print(tslDict)
 
 def main():
