@@ -40,24 +40,12 @@ def findSharedExonGenes(exonRf, transTbl):
     return readThroughs
 
 def transcriptionSupportLevel(tsl):
-    levelsList=[]
-    counter = 0
-    tslLevel={}
+    tslDict={}
     for tslRow in csv.DictReader(tsl, delimiter='\t'):
         for key, val in tslRow.items():
-            if key == 'level':
-                levelsList.append(tslRow['level'])
-                index = 0
-                for element in levelsList:  # makes each element an int
-                    levelsList[index] = int(element)
-                    index += 1
-            levelsSet = set(levelsList)
-        for element in levelsSet:
-            if int(tslRow[key]) in levelsSet:
-                counter += 1
-                tslLevel.update({"level " + tslRow[key]: counter})
-                print(tslLevel)
-        counter=0
+            if key=='transcriptId' and 'level':
+                tslDict.update({tslRow['transcriptId']:tslRow['level']})
+    print(tslDict)
 
 def main():
     file = open('tests/cases/case2AnnotV36.gp', 'r')
