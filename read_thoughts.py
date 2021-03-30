@@ -1,7 +1,6 @@
 from pycbio.hgdata.genePred import GenePredTbl
 from pycbio.hgdata.rangeFinder import RangeFinder
 import csv
-import operator
 from collections import defaultdict, Counter
 
 def addExons(exonRf, trans):
@@ -39,13 +38,23 @@ def findSharedExonGenes(exonRf, transTbl):
             readThroughs.append(trans)
     return readThroughs
 
-def transcriptionSupportLevel(tsl):
+def tslDict(tslFile):
+    #use dict to count levels and save
+    #print out levels
     tslDict={}
-    for tslRow in csv.DictReader(tsl, delimiter='\t'):
+    for tslRow in csv.DictReader(tslFile, delimiter='\t'):
         transcriptId=tslRow['transcriptId']
         level=tslRow['level']
         tslDict[transcriptId]=level
-    print(tslDict)
+    return(tslDict)
+
+def countTslLevels(tsl):
+    levels=[]
+    for key, value in tslDict(tsl).items():
+        levels.append(value)
+    return (Counter(levels))
+
+
 
 def main():
     file = open('tests/cases/case2AnnotV36.gp', 'r')
@@ -54,5 +63,7 @@ def main():
     exonRf = exonRangeFinder(transTbl)
     readThroughs = findSharedExonGenes(exonRf, transTbl)
     #print("readThroughs", readThroughs)
-    tsl = transcriptionSupportLevel(tslFile)
+    tsl = countTslLevels(tslFile)
+    print(tsl)
+
 main()
