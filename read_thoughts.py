@@ -46,24 +46,27 @@ def tslDict(tslFile):
         transcriptId=tslRow['transcriptId']
         level=tslRow['level']
         tslDict[transcriptId]=level
-    return(tslDict)
+    return (tslDict)
 
 def countTslLevels(tsl):
     levels=[]
     for key, value in tslDict(tsl).items():
         levels.append(value)
-    return (Counter(levels))
+    #print(Counter(levels))
 
-
-
+def tslOfReadThroughs(readThroughs, tslFile, trans):
+    for trans.name in readThroughs:
+        for trans.name in tslDict(tslFile).items():
+            fh = open('tslOfReadThroughs.tsv', 'w')
+            print('transcriptID', 'level', sep='\t', file=fh)
+            fh.write(str(trans.name))
 def main():
     file = open('tests/cases/case2AnnotV36.gp', 'r')
-    tslFile = open('tests/cases/case1TranscriptionSupportLevelV36.tsv')
+    tslFile = open('tests/cases/case2TranscriptionSupportLevelV36.tsv')
     transTbl = GenePredTbl(file)
     exonRf = exonRangeFinder(transTbl)
     readThroughs = findSharedExonGenes(exonRf, transTbl)
-    #print("readThroughs", readThroughs)
-    tsl = countTslLevels(tslFile)
-    print(tsl)
-
+    #print("readThroughs", readThroughs[])
+    #tsl = countTslLevels(tslFile)
+    tslRT = tslOfReadThroughs(readThroughs, tslFile, transTbl)
 main()
